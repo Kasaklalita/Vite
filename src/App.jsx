@@ -1,43 +1,28 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { useState, useEffect } from 'react'
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchAllCategories = async () => {
+      await axios
+        .get("https://web-production-dfb0.up.railway.app/api/v1/categories/")
+        .then((response) => {
+          setCategories(response.data);
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchAllCategories();
+  }, []);
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <p>{categories[0]['slug']}</p>
     </div>
   )
 }
